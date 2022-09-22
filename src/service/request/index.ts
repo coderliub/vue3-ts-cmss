@@ -86,7 +86,7 @@ class LBRequest {
     )
   }
 
-  request<T>(config: LBRequestConfig<T>): Promise<T> {
+  request<T = any>(config: LBRequestConfig<T>): Promise<T> {
     return new Promise((resolve, reject) => {
       // 1,单个请求对请求config的处理
       if (config.interceptors?.requestInterceptor) {

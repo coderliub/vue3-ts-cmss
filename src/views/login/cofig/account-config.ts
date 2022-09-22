@@ -45,12 +45,14 @@ export const phoneRules = {
   ],
   code: [
     {
+      required: true,
       message: '请输入验证码',
       trigger: 'blur'
     },
     {
       pattern: /^\d{6}$/,
       message: '验证码必须是6位数字~',
+      //
       trigger: 'blur'
     }
   ]

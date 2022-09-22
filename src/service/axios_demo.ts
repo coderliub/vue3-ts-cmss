@@ -1,4 +1,4 @@
-import axios from 'axios'
+// import axios from 'axios'
 
 // axios的实例对象
 // 1.模拟get请求

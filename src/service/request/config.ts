@@ -3,7 +3,7 @@
 // const BASE_NAME = 'coderwhy'
 // 其他文件
 
-// const BASE_URL = 'http://coderwhy.org/prod'
+// const BASE_URL = 'http://coderwhy.org/prod''/api'
 // const BASE_NAME = 'kobe'
 
 // const BASE_URL = 'http://coderwhy.org/test'
@@ -17,7 +17,7 @@ let BASE_URL = ''
 const TIME_OUT = 10000
 
 if (process.env.NODE_ENV === 'development') {
-  BASE_URL = 'http://123.207.32.32:8000/'
+  BASE_URL = '/api'
 } else if (process.env.NODE_ENV === 'production') {
   BASE_URL = 'http://coderwhy.org/prod'
 } else {

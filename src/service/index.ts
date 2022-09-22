@@ -2,6 +2,8 @@
 import LBRequest from './request'
 import { BASE_URL, TIME_OUT } from './request/config'
 
+import localCache from '@/utils/cache'
+
 const lbRequest = new LBRequest({
   baseURL: BASE_URL,
   timeout: TIME_OUT,
@@ -9,9 +11,9 @@ const lbRequest = new LBRequest({
     // 请求拦截器
     requestInterceptor: (config) => {
       // 携带token的拦截
-      const token = ''
+      const token = localCache.getCache('token')
       if (token) {
-        // config.headers.Authorization = `Bearer ${token}`
+        config.headers!.Authorization = `Bearer ${token}`
       }
 
       console.log('请求成功拦截')

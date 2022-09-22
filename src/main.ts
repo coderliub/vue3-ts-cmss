@@ -5,12 +5,12 @@ import './assets/css/index.less'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
 import './service/axios_demo'
-import lbRequest from './service'
 
 import App from './App.vue'
 
 import router from './router'
 import store from './store'
+import { setupStore } from './store'
 
 const app = createApp(App)
 
@@ -20,14 +20,6 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 // app.use(globalRegister)
 app.use(router)
 app.use(store)
-// app.use(lbRequest)
+setupStore()
 
 app.mount('#app')
-
-console.log(process.env.VUE_APP_BASE_URL)
-console.log(process.env.VUE_APP_BASE_NAME)
-
-lbRequest.request({
-  url: '/home/multidata',
-  method: 'GET'
-})

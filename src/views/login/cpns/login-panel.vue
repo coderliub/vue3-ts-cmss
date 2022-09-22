@@ -1,8 +1,8 @@
 <template>
   <div class="login-panel">
     <h1 class="title">后台管理系统</h1>
-    <el-tabs type="border-card" class="demo-tabs" stretch>
-      <el-tab-pane>
+    <el-tabs type="border-card" stretch v-model="currentTab">
+      <el-tab-pane name="account">
         <template #label>
           <span class="custom-tabs-label">
             <el-icon><UserFilled /></el-icon>
@@ -12,14 +12,14 @@
         <!-- 给子组件设置ref -->
         <login-account ref="accountRef" />
       </el-tab-pane>
-      <el-tab-pane>
+      <el-tab-pane name="phone">
         <template #label>
           <span class="custom-tabs-label">
             <el-icon><Iphone /></el-icon>
             <span>手机登录</span>
           </span>
         </template>
-        <login-phone ref="" />
+        <login-phone ref="phoneRef" />
       </el-tab-pane>
     </el-tabs>
 
@@ -47,21 +47,30 @@ export default defineComponent({
     LoginPhone
   },
   setup() {
+    // 是否记住密码
     const isRemember = ref(false)
     // 获取accountRef子组件实例
     // <typeof LoginAccount>表示LoginAccount组件的类型
     // InstanceType<typeof LoginAccount>表示LoginAccount组件的实例类型
     const accountRef = ref<InstanceType<typeof LoginAccount>>()
+    const phoneRef = ref<InstanceType<typeof LoginPhone>>()
+    const currentTab = ref<string>('account')
 
+    // 管理登录事件
     const handleLoginClick = () => {
-      console.log('登录')
-      accountRef.value?.loginAction()
+      if (currentTab.value === 'account') {
+        accountRef.value?.loginAction(isRemember.value)
+      } else {
+        phoneRef.value?.loginAction()
+      }
     }
 
     return {
       isRemember,
-      handleLoginClick,
-      accountRef
+      accountRef,
+      phoneRef,
+      currentTab,
+      handleLoginClick
     }
   }
 })
