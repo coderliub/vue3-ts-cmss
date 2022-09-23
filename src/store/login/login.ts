@@ -11,6 +11,7 @@ import { IAccount } from '@/service/login/type'
 import { ILoginState } from './types'
 import { IRootState } from '../types'
 import router from '@/router'
+import { mapMenusToRoutes } from '@/utils/map-menus'
 
 // ILoginState: 指定 state 的类型,IRootState: 指定根 state 的类型
 const loginMoudel: Module<ILoginState, IRootState> = {
@@ -31,6 +32,13 @@ const loginMoudel: Module<ILoginState, IRootState> = {
     },
     changeUserMenus(state, userMenus: any) {
       state.userMenus = userMenus
+
+      // userMenus: 动态添加路由
+      const routes = mapMenusToRoutes(userMenus)
+      // 将routes => router.main.children
+      routes.forEach((route) => {
+        router.addRoute('main', route)
+      })
     }
   },
   getters: {},
