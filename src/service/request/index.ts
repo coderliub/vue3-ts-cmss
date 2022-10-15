@@ -65,7 +65,7 @@ class LBRequest {
 
         // res被axios做了一层封装，实际的数据在res.data里
         const data = res.data
-        if (data.returnCode === '-1001') {
+        if (data?.returnCode === '-1001') {
           console.log('请求失败,错误信息')
         } else {
           return data

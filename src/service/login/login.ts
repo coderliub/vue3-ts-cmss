@@ -1,6 +1,7 @@
 import lbRequest from '../index'
 
-import { IAccount, IDatatype, ILoginResult } from './type'
+import { IAccount, ILoginResult } from './type'
+import { IDataType } from '../types'
 
 enum LoginAPI {
   AccountLogin = '/login',
@@ -10,7 +11,7 @@ enum LoginAPI {
 
 // 用户登录
 export function accountLoginRequest(account: IAccount) {
-  return lbRequest.post<IDatatype<ILoginResult>>({
+  return lbRequest.post<IDataType<ILoginResult>>({
     url: LoginAPI.AccountLogin,
     data: account
   })
@@ -18,14 +19,15 @@ export function accountLoginRequest(account: IAccount) {
 
 // 请求用户信息
 export function requestUserInfoById(id: number) {
-  return lbRequest.get<IDatatype>({
+  return lbRequest.get<IDataType>({
     url: LoginAPI.LoginUserInfo + id,
     showLoading: false
   })
 }
 
+// 请求用户菜单
 export function requestUserMenusByRoleId(id: number) {
-  return lbRequest.get<IDatatype>({
+  return lbRequest.get<IDataType>({
     url: LoginAPI.UserMenus + id + '/menu'
   })
 }

@@ -16,7 +16,8 @@ module.exports = defineConfig({
         },
         changeOrigin: true
       }
-    }
+    },
+    historyApiFallback: true
   },
   configureWebpack: {
     plugins: [

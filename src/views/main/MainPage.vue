@@ -9,7 +9,19 @@
           <nav-header @foldChange="handleFoldChange" />
         </el-header>
         <el-main class="page-content">
-          <router-view></router-view>
+          <div class="page-info">
+            <router-view v-slot="{ Component }">
+              <transition name="fade-transform" mode="out-in">
+                <keep-alive :include="include">
+                  <component :is="Component" />
+                </keep-alive>
+              </transition>
+            </router-view>
+
+            <!-- <keep-alive :include="include">
+              <router-view></router-view>
+            </keep-alive> -->
+          </div>
         </el-main>
       </el-container>
     </el-container>
@@ -33,9 +45,12 @@ export default defineComponent({
       isCollapse.value = isFold
     }
 
+    const include = ['users', 'role']
+
     return {
       isCollapse,
-      handleFoldChange
+      handleFoldChange,
+      include
     }
   }
 })

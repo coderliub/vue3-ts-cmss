@@ -10,9 +10,3 @@ export interface ILoginResult {
   name: string
   token: string
 }
-
-// 返回数据对象的类型
-export interface IDatatype<T = any> {
-  code: number
-  data: T
-}

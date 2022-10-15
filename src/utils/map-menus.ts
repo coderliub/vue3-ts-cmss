@@ -1,4 +1,7 @@
+import { IBreadcrumb } from '@/base-ui/breadcrumb'
 import { RouteRecordRaw } from 'vue-router'
+
+let firstMenu: any = null
 
 export function mapMenusToRoutes(userMenus: any[]): RouteRecordRaw[] {
   const routes: RouteRecordRaw[] = []
@@ -12,7 +15,7 @@ export function mapMenusToRoutes(userMenus: any[]): RouteRecordRaw[] {
     // console.log(key)
     // 获取文件模块,拿到文件导出的对象
     const route = require('../router/main' + key.split('.')[1])
-    console.log(route)
+    // console.log(route)
     allRoutes.push(route.default)
   })
 
@@ -30,6 +33,9 @@ export function mapMenusToRoutes(userMenus: any[]): RouteRecordRaw[] {
         if (route) {
           routes.push(route)
         }
+        if (!firstMenu) {
+          firstMenu = menu
+        }
       }
     })
   }
@@ -39,3 +45,98 @@ export function mapMenusToRoutes(userMenus: any[]): RouteRecordRaw[] {
   // 4.返回过滤后的routes
   return routes
 }
+
+// 递归查找面包屑
+export function pathMapBreadcrumbs(userMenus: any[], currentPath: string) {
+  const breadcrumbs: IBreadcrumb[] = []
+  pathMapToMenu(userMenus, currentPath, breadcrumbs)
+  return breadcrumbs
+}
+
+// 递归查找菜单
+export function pathMapToMenu(
+  userMenus: any[],
+  currentPath: string,
+  breadcrumbs?: IBreadcrumb[]
+): any {
+  for (const menu of userMenus) {
+    if (menu.type === 1) {
+      const findMenu = pathMapToMenu(menu.children ?? [], currentPath)
+      if (findMenu) {
+        breadcrumbs?.push({ name: menu.name })
+        breadcrumbs?.push({ name: findMenu.name })
+        return findMenu
+      }
+    } else if (menu.type === 2 && menu.url === currentPath) {
+      return menu
+    }
+  }
+}
+
+export function mapMenusToPermissions(userMenus: any[]) {
+  const permissions: string[] = []
+  _recurseGetPermission(userMenus)
+  return permissions
+
+  function _recurseGetPermission(userMenus: any[]) {
+    userMenus.forEach((menu) => {
+      if (menu.type === 1 || menu.type === 2) {
+        _recurseGetPermission(menu.children ?? [])
+      } else if (menu.type === 3) {
+        permissions.push(menu.permission)
+      }
+    })
+  }
+}
+
+export function mapMenusToMenuTree(menuList: any[]) {
+  const menuTree: number[] = []
+  _recurseGetMenuTree(menuList)
+  return menuTree
+  // 递归查找并获取叶子节点
+  function _recurseGetMenuTree(menuList: any[]) {
+    for (const menu of menuList) {
+      if (menu.children) {
+        _recurseGetMenuTree(menu.children)
+      } else {
+        menuTree.push(menu.id)
+      }
+    }
+  }
+}
+
+// 递归查找面包屑
+// export function pathMapBreadcrumbs(userMenus: any[], currentPath: string) {
+//   const breadcrumbs: IBreadcrumb[] = []
+
+//   for (const menu of userMenus) {
+//     if (menu.type === 1) {
+//       const findMenu = pathMapToMenu(menu.children ?? [], currentPath)
+//       if (findMenu) {
+//         breadcrumbs.push({ name: menu.name, path: menu.url })
+//         breadcrumbs.push({ name: findMenu.name, path: findMenu.url })
+//         return findMenu
+//       }
+//     } else if (menu.type === 2 && menu.url === currentPath) {
+//       return menu
+//     }
+//   }
+
+//   return breadcrumbs
+// }
+
+// 递归查找菜单
+// export function pathMapToMenu(userMenus: any[], currentPath: string): any {
+//   for (const menu of userMenus) {
+//     if (menu.type === 1) {
+//       const findMenu = pathMapToMenu(menu.children ?? [], currentPath)
+//       if (findMenu) {
+//         return findMenu
+//       }
+//     } else if (menu.type === 2 && menu.url === currentPath) {
+//       return menu
+//     }
+//   }
+// }
+
+export { firstMenu }

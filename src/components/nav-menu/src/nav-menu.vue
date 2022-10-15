@@ -5,7 +5,7 @@
       <span v-show="!collapse" class="title">Vue3+TS</span>
     </div>
     <el-menu
-      default-active="2"
+      :default-active="defaultValue"
       class="el-menu-vertical-demo"
       :collapse="collapse"
       background-color="#001529"
@@ -58,9 +58,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from 'vue'
+import { defineComponent, computed, ref } from 'vue'
 import { useStore } from '@/store'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
+
+import { pathMapToMenu } from '@/utils/map-menus'
 
 // import { IRootState } from '@/store/types'
 
@@ -84,6 +86,13 @@ export default defineComponent({
 
     // 获取路由实例
     const router = useRouter()
+    // 获取当前路由
+    const route = useRoute()
+    const currentPath = route.path
+
+    // 根据当前路由获取菜单
+    const menu = pathMapToMenu(userMenus.value, currentPath)
+    const defaultValue = ref(menu.id + '')
 
     // 菜单点击事件
     const handleMenuItemClick = (item: any) => {
@@ -96,6 +105,7 @@ export default defineComponent({
 
     return {
       userMenus,
+      defaultValue,
       filterIcon,
       handleMenuItemClick
     }
