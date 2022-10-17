@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, withDefaults, computed } from 'vue'
+import { withDefaults, computed } from 'vue'
 import * as echarts from 'echarts'
 import BaseEchart from '@/base-ui/echart'
 
