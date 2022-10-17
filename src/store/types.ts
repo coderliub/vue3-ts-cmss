@@ -1,10 +1,9 @@
 import { ILoginState } from './login/types'
 import { ISystemState } from './main/system/types'
+import { IDashboardState } from './main/analysis/types'
 
 // 定义根state类型
 export interface IRootState {
-  name: string
-  age: number
   entireDepartment: any[]
   entireRole: any[]
   entireMenu: any[]
@@ -14,6 +13,7 @@ export interface IRootState {
 export interface IRootWithModule {
   login: ILoginState
   system: ISystemState
+  analysis: IDashboardState
 }
 
 // 交叉类型

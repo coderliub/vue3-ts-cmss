@@ -1,67 +1,127 @@
 <template>
   <div class="dashboard">
-    <div ref="divRef" :style="{ width: '600px', height: '500px' }"></div>
+    <el-row :gutter="10">
+      <el-col :span="7">
+        <lb-card title="分类商品的数量(饼图)">
+          <pie-echart :pieData="categoryGoodsCount"></pie-echart>
+        </lb-card>
+      </el-col>
+      <el-col :span="10">
+        <lb-card title="不同城市商品销量">
+          <map-echart :mapData="addressGoodsSale"></map-echart>
+        </lb-card>
+      </el-col>
+      <el-col :span="7">
+        <lb-card title="分类商品数量(玫瑰图)">
+          <rose-echart :roseData="categoryGoodsCount"></rose-echart>
+        </lb-card>
+      </el-col>
+    </el-row>
+
+    <el-row :gutter="10" class="content-row">
+      <el-col :span="12">
+        <lb-card title="分类商品的销量">
+          <line-echart v-bind="categoryGoodsSale"></line-echart>
+        </lb-card>
+      </el-col>
+      <el-col :span="12">
+        <lb-card title="分类商品的收藏">
+          <bar-echart v-bind="categoryGoodsSale"></bar-echart>
+        </lb-card>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted } from 'vue'
+import { defineComponent, computed } from 'vue'
+import { useStore } from '@/store'
 
-import * as echarts from 'echarts'
+import LbCard from '@/base-ui/card'
+import {
+  PieEchart,
+  RoseEchart,
+  lineEchart,
+  barEchart,
+  mapEchart
+} from '@/components/page-echarts'
+// import * as echarts from 'echarts'
 
 export default defineComponent({
   name: 'dashboard',
+  components: {
+    LbCard,
+    PieEchart,
+    RoseEchart,
+    lineEchart,
+    barEchart,
+    mapEchart
+  },
   setup() {
-    const divRef = ref<HTMLElement>()
-    onMounted(() => {
-      // 1.初始化echarts实例
-      // 3个参数：dom容器，主题，渲染器
-      const echartInstance = echarts.init(divRef.value!, 'dark', {
-        renderer: 'svg'
+    const store = useStore()
+    // 请求数据
+    store.dispatch('analysis/getDashboardDataAction')
+
+    // 获取数据
+    // 用computed保证当请求到vuex中的数据时，才会渲染
+    const categoryGoodsCount = computed(() => {
+      return store.state.analysis.categoryGoodsCount.map((item: any) => {
+        return {
+          name: item.name,
+          value: item.goodsCount
+        }
       })
-      // 2.编写配置文件
-      const option = {
-        title: {
-          text: 'ECharts 入门示例'
-        },
-        // 鼠标悬浮样式
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            type: 'cross',
-            label: {
-              backgroundColor: '#6a7985'
-            }
-          }
-        },
-        // 图例
-        legend: {
-          data: ['销量']
-        },
-        // x轴展示内容
-        xAxis: {
-          data: ['衬衫', '羊毛衫', '雪纺衫', '裤子', '高跟鞋', '袜子']
-        },
-        // y轴展示内容，可以不设置，会自动根据数据计算
-        yAxis: {},
-        // 数据
-        series: [
-          {
-            name: '销量',
-            // 图表类型
-            type: 'bar',
-            data: [5, 20, 36, 10, 10, 20]
-          }
-        ]
+    })
+    const categoryGoodsSale = computed(() => {
+      const xLabels: string[] = []
+      const values: any[] = []
+
+      const categoryGoodsSale = store.state.analysis.categoryGoodsSale
+      for (const item of categoryGoodsSale) {
+        xLabels.push(item.name)
+        values.push(item.goodsCount)
       }
-      // 3.设置配置，并绘制图表
-      echartInstance.setOption(option)
+
+      return {
+        xLabels,
+        values
+      }
+    })
+    const categoryGoodsFavor = computed(() => {
+      const xLabels: string[] = []
+      const values: any[] = []
+
+      const categoryGoodsFavor = store.state.analysis.categoryGoodsFavor
+      for (const item of categoryGoodsFavor) {
+        xLabels.push(item.name)
+        values.push(item.goodsFavor)
+      }
+
+      return {
+        xLabels,
+        values
+      }
+    })
+    const addressGoodsSale = computed(() => {
+      return store.state.analysis.addressGoodsSale.map((item: any) => {
+        return {
+          name: item.address,
+          value: item.count
+        }
+      })
     })
     return {
-      divRef
+      categoryGoodsCount,
+      categoryGoodsSale,
+      categoryGoodsFavor,
+      addressGoodsSale
     }
   }
 })
 </script>
 
-<style scoped></style>
+<style scoped lang="less">
+.content-row {
+  margin-top: 15px;
+}
+</style>

@@ -25,7 +25,7 @@ export const modalConfig: IForm = {
       field: 'imgUrl',
       type: 'input',
       label: '商品图片',
-      placeholder: '请输入商品图片'
+      placeholder: '请放入商品图片链接'
     }
   ],
   colLayout: { span: 24 },

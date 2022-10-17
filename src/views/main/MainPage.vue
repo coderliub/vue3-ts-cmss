@@ -10,14 +10,15 @@
         </el-header>
         <el-main class="page-content">
           <div class="page-info">
-            <router-view v-slot="{ Component }">
+            <!-- <router-view v-slot="{ Component }">
               <transition name="fade-transform" mode="out-in">
                 <keep-alive :include="include">
                   <component :is="Component" />
                 </keep-alive>
               </transition>
-            </router-view>
+            </router-view> -->
 
+            <router-view></router-view>
             <!-- <keep-alive :include="include">
               <router-view></router-view>
             </keep-alive> -->
@@ -45,7 +46,7 @@ export default defineComponent({
       isCollapse.value = isFold
     }
 
-    const include = ['users', 'role']
+    const include = ['users', 'role', 'department', 'menus']
 
     return {
       isCollapse,

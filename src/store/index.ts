@@ -4,6 +4,7 @@ import { IRootState, IStoreType } from './types'
 
 import login from './login/login'
 import system from './main/system/system'
+import analysis from './main/analysis/dashboard'
 
 import { getPageListData } from '@/service/main/system/system'
 
@@ -11,8 +12,6 @@ import { getPageListData } from '@/service/main/system/system'
 const store = createStore<IRootState>({
   state: () => {
     return {
-      name: 'coderlb',
-      age: 23,
       entireDepartment: [],
       entireRole: [],
       entireMenu: []
@@ -68,7 +67,8 @@ const store = createStore<IRootState>({
   },
   modules: {
     login,
-    system
+    system,
+    analysis
   }
 })
 

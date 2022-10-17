@@ -99,10 +99,14 @@ export default defineComponent({
     const formData = ref({ ...props.modelValue })
 
     // watch对reactive是默认深度监听的，ref对象则需手动开启,ref需要.value取到值然后再调属性
-    watch(formData.value, (newValue) => {
-      console.log('子组件formData更新了')
-      emit('update:modelValue', newValue), { deep: true }
-    })
+    watch(
+      formData.value,
+      (newValue) => {
+        console.log('子组件formData更新了')
+        emit('update:modelValue', newValue)
+      },
+      { deep: true }
+    )
 
     // 实际不会执行set方法
     // const formData = computed({

@@ -16,16 +16,30 @@
 
       <!-- 列中的插槽 -->
       <template #status="scope">
-        <el-switch
-          v-model="scope.row.enable"
-          size="large"
-          style="--el-switch-off-color: #ff4949"
-          inline-prompt
-          :active-value="1"
-          :inactive-value="0"
-          active-text="启用"
-          inactive-text="禁用"
-        />
+        <template v-if="scope.row.enable === 1">
+          <el-switch
+            v-model="scope.row.enable"
+            size="large"
+            style="--el-switch-off-color: #ff4949"
+            inline-prompt
+            :active-value="1"
+            :inactive-value="0"
+            active-text="启用"
+            inactive-text="禁用"
+          />
+        </template>
+        <template v-else>
+          <el-switch
+            v-model="scope.row.status"
+            size="large"
+            style="--el-switch-off-color: #ff4949"
+            inline-prompt
+            :active-value="1"
+            :inactive-value="0"
+            active-text="启用"
+            inactive-text="禁用"
+          />
+        </template>
       </template>
       <template #createAt="scope">
         <strong>{{ $filters.formatTime(scope.row.createAt) }}</strong>
