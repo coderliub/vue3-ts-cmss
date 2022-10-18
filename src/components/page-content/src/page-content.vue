@@ -45,7 +45,7 @@
         <strong>{{ $filters.formatTime(scope.row.createAt) }}</strong>
       </template>
       <template #updateAt="scope">
-        <span>{{ $filters.formatTime(scope.row.updateAt) }}</span>
+        <strong>{{ $filters.formatTime(scope.row.updateAt) }}</strong>
       </template>
       <template #handler="scope">
         <div class="handle-btns">

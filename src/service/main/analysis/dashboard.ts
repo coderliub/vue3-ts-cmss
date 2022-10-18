@@ -1,10 +1,10 @@
 import lbRequest from '@/service'
 
 enum DashboardAPI {
-  categoryGoodsCount = 'goods/category/count',
-  categoryGoodsSales = 'goods/category/sale',
-  categoryGoodsFavor = 'goods/category/favor',
-  addressGoodsSale = 'goods/address/sale'
+  categoryGoodsCount = '/goods/category/count',
+  categoryGoodsSales = '/goods/category/sale',
+  categoryGoodsFavor = '/goods/category/favor',
+  addressGoodsSale = '/goods/address/sale'
 }
 
 export function getCategoryGoodsCount() {
