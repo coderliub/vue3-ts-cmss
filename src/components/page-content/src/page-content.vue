@@ -4,7 +4,6 @@
       :listData="dataList"
       :listCount="dataCount"
       v-bind="contentTableConfig"
-      @SelectionChange="handleSelectionChange"
       v-model:page="pageInfo"
     >
       <!-- header中的插槽 -->
@@ -168,10 +167,6 @@ export default defineComponent({
     )
 
     // 5.处理表格中的事件(选中,编辑,删除)
-    // 监听分页信息的变化
-    const handleSelectionChange = (value: any) => {
-      console.log(value)
-    }
     // 新建
     const handleNewClick = () => {
       emit('newBtnClick')
@@ -194,7 +189,6 @@ export default defineComponent({
       dataCount,
       getPageData,
       otherProPSlots,
-      handleSelectionChange,
       pageInfo,
       isCreate,
       isUpdate,

@@ -98,7 +98,11 @@ const systemModule: Module<ISystemState, IRootState> = {
 
       // 1. 请求数据
       const pageResult = await getPageListData(pageUrl, payload.queryInfo)
-
+      if (!pageResult) {
+        ElMessage.error('获取数据失败')
+        return
+      }
+      ElMessage.success('获取页面数据成功')
       // 2. 将数据提交给mutation
       const { list, totalCount } = pageResult.data
 
@@ -117,6 +121,7 @@ const systemModule: Module<ISystemState, IRootState> = {
 
       // 2.调用删除网络请求
       await deletePageData(pageUrl)
+      ElMessage.success('删除数据成功')
 
       // 3.重新请求列表数据
       dispatch('getPageListAction', {
@@ -133,6 +138,7 @@ const systemModule: Module<ISystemState, IRootState> = {
       const { pageName, newData } = payload
       // 2.调用新增网络请求
       await createPageData(`/${pageName}`, newData)
+      ElMessage.success('添加成功')
       // 3.重新请求列表数据
       dispatch('getPageListAction', {
         pageName,

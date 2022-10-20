@@ -15,21 +15,22 @@ const lbRequest = new LBRequest({
       if (token) {
         config.headers!.Authorization = `Bearer ${token}`
       }
-
-      console.log('请求成功拦截')
       return config
     },
     requestinterceptorCatch: (err) => {
-      console.log('请求失败拦截')
       return err
     },
     // 响应拦截器
     responseInterceptor: (res) => {
-      console.log('请求响应成功拦截')
+      if (res.data.code === -1003) {
+        ElMessage.error(res.data.data)
+      }
       return res
     },
-    responseinterceptorCatch(err) {
-      console.log('请求响应失败拦截')
+    responseinterceptorCatch: (err) => {
+      if (err.response.status === 400) {
+        ElMessage.error(err.response.data)
+      }
       return err
     }
   }

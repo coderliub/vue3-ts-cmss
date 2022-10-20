@@ -3,6 +3,7 @@
     <h1 class="title">后台管理系统</h1>
     <el-tabs type="border-card" stretch v-model="currentTab">
       <el-tab-pane name="account">
+        <!-- 使用插槽自定义内容 -->
         <template #label>
           <span class="custom-tabs-label">
             <el-icon><UserFilled /></el-icon>

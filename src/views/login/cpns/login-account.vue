@@ -37,7 +37,7 @@ export default defineComponent({
 
     // 登录逻辑
     const loginAction = (isRemember: boolean) => {
-      // 校验表单
+      // 校验表单，返回回调函数
       formRef.value?.validate((valid) => {
         // 校验成功
         if (valid) {

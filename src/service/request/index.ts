@@ -1,6 +1,7 @@
 import axios from 'axios'
 import type { AxiosInstance } from 'axios'
 import type { LBRequestInterceptors, LBRequestConfig } from './type'
+import localCache from '@/utils/cache'
 
 // import { ElLoading } from 'element-plus/lib/index'
 import { LoadingInstance } from 'element-plus/lib/components/loading/src/loading'
@@ -20,9 +21,11 @@ class LBRequest {
 
     // 保存基本信息
     this.showLoading = config.showLoading ?? DEFAULT_LOADING
+    // 保存拦截器
     this.interceptors = config.interceptors
 
     // 1.从config中取出的拦截器是对应的实例的拦截器
+    // 先添加了实例自己设置的拦截器，后添加了所有实例共有的拦截器
     this.instance.interceptors.request.use(
       this.interceptors?.requestInterceptor,
       this.interceptors?.requestinterceptorCatch
@@ -37,6 +40,10 @@ class LBRequest {
       // 请求是后添加的先执行
       (config) => {
         // console.log('所有的实例都有的拦截器：请求成功拦截')
+        const token = localCache.getCache('token')
+        if (token) {
+          config.headers!.Authorization = `Bearer ${token}`
+        }
 
         // 判断是否需要添加loading
         if (this.showLoading) {
@@ -62,25 +69,18 @@ class LBRequest {
 
         // 将loading移除
         this.loading?.close()
-
         // res被axios做了一层封装，实际的数据在res.data里
         const data = res.data
-        if (data?.returnCode === '-1001') {
-          console.log('请求失败,错误信息')
-        } else {
-          return data
-        }
+        return data
       },
       (err) => {
         // console.log('所有的实例都有的拦截器：响应失败拦截')
-
         // 将loading移除
         this.loading?.close()
-
-        // 判断不同的httpErrorCode显示不同的错误信息，真实开发用switch
-        if (err.response.status === 404) {
-          console.log('404错误')
+        if (err.response.status === 400) {
+          console.log('400的错误')
         }
+        // 判断不同的httpErrorCode显示不同的错误信息，真实开发用switch
         return err
       }
     )
@@ -111,13 +111,14 @@ class LBRequest {
           this.showLoading = DEFAULT_LOADING
 
           // 3.将结果resolve返回出去
+          // console.log(res)
           resolve(res)
         })
         .catch((err) => {
           // 错误的情况下也请求完成后，设置回默认值，这样不会影响下一个请求
           this.showLoading = DEFAULT_LOADING
+          console.log(err)
           reject(err)
-          return err
         })
     })
   }

@@ -50,6 +50,11 @@ const loginMoudel: Module<ILoginState, IRootState> = {
     async accountLoginAction({ commit, dispatch }, payload: IAccount) {
       // 1.实现登录逻辑
       const loginResult = await accountLoginRequest(payload)
+      // 网络请求失败
+      if (!loginResult) {
+        return
+      }
+      ElMessage.success('登录成功')
       const { id, token } = loginResult.data
       commit('changeToken', token)
       // 保存token到本地

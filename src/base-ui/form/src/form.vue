@@ -35,8 +35,8 @@
                     v-for="option in item.options"
                     :value="option.value"
                     :key="option.value"
+                    :label="option.title"
                   >
-                    {{ option.title }}
                   </el-option>
                 </el-select>
               </template>
@@ -102,7 +102,7 @@ export default defineComponent({
     watch(
       formData.value,
       (newValue) => {
-        console.log('子组件formData更新了')
+        // console.log('子组件formData更新了')
         emit('update:modelValue', newValue)
       },
       { deep: true }
